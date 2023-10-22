@@ -1,0 +1,79 @@
+
+public class Property {
+	private String propertyName, city, owner; 
+	private double rentAmount;
+	private Plot plot;
+	public Property(String propertyName, String city,  double rentAmount, String owner){
+		propertyName = this.propertyName;
+		city = this.city;
+		owner = this.owner;
+		rentAmount = this.rentAmount;
+	}
+
+	public Property(String propertyName, String city,  double rentAmount, String owner, int x, int y, int width, int depth){
+		propertyName = this.propertyName;
+		city = this.city;
+		owner = this.owner;
+		rentAmount = this.rentAmount;
+		plot = new Plot(x, y, width, depth);
+	}
+
+	public Property(Property otherProperty) {
+		propertyName = otherProperty.getPropertyName();
+		city = otherProperty.getCity();
+		owner = otherProperty.getOwner();
+		rentAmount = otherProperty.getRentAmount();
+		plot = otherProperty.getPlot();
+	}
+
+
+	public String getCity() {
+		return city;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public Plot getPlot() {
+		return plot;
+	}
+
+	public String getPropertyName() {
+		return propertyName;
+	}
+
+	public double getRentAmount() {
+		return rentAmount;
+	}
+
+	public void setCity(String city) {
+		city = this.city;
+	}
+
+	public void setOwner(String owner) {
+		owner = this.owner;
+	}
+
+	public void setPlot(Plot plot) {
+		plot = this.plot;
+	}
+
+	public void setPropertyName(String propertyName) {
+		propertyName = this.propertyName;
+	}
+
+	public void setRentAmount(double rentAmount) {
+		rentAmount = this.rentAmount;
+	}
+
+	public String toString(Property property){
+		String name = property.getPropertyName();
+		String cityName = property.getCity();
+		String ownerName = property.getOwner();
+		double rentalValue = property.getRentAmount();
+
+
+		return name + "," + cityName + "," + ownerName + "," + rentalValue;
+	}
+}
