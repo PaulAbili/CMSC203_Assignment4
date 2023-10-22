@@ -1,0 +1,165 @@
+import java.util.Properties;
+
+public class ManagementCompany {
+	private String name,taxID;
+	private double mgmFee;
+	private Plot plot;
+	private Property[] properties;  
+	private int numberOfProperties;
+	static final int MAX_PROPERTY = 5;
+	static final int MGMT_WIDTH = 10;
+	static final int MGMT_DEPTH = 10;
+	private Plot mgtPlot;
+	public ManagementCompany() {
+		name = "";
+		taxID = "";
+		plot = new Plot();
+		properties = new Property[MAX_PROPERTY];
+		numberOfProperties = 0;
+		mgtPlot = new Plot(0,0,MGMT_WIDTH,MGMT_DEPTH);
+	}
+	public ManagementCompany(String name, String taxID, double mgmFee) {
+		name = this.name;
+		taxID = this.taxID;
+		mgmFee = this.mgmFee;
+		properties = new Property[MAX_PROPERTY];
+		numberOfProperties = 0;
+		mgtPlot = new Plot(0,0,MGMT_WIDTH,MGMT_DEPTH);
+	}
+
+	public ManagementCompany(String name, String taxID, double mgmFee, int x, int y, int width, int depth) {
+		name = this.name;
+		taxID = this.taxID;
+		mgmFee = this.mgmFee;
+		plot = new Plot(x, y, width, depth);
+		properties = new Property[MAX_PROPERTY];
+		numberOfProperties = 0;
+		mgtPlot = new Plot(x,y,MGMT_WIDTH,MGMT_DEPTH);
+	}
+
+	public ManagementCompany(ManagementCompany otherCompany) {
+		name = otherCompany.getName();
+		taxID = otherCompany.getTaxID();
+		mgmFee = otherCompany.getMgmFeePer();
+		plot = new Plot(otherCompany.getPlot());
+		properties = new Property[MAX_PROPERTY];
+		numberOfProperties = 0;
+		mgtPlot = new Plot();
+	}
+
+	public int addProperty(String name, String city, double rent, String owner) {
+		if(numberOfProperties == MAX_PROPERTY - 1) {
+			return -1;
+		} else {
+			properties[numberOfProperties] = new Property(name, city, rent, owner);
+			return numberOfProperties++;
+		}
+
+	}
+
+	public int addProperty(String name, String city, double rent, String owner, int x, int y, int width, int depth) {
+		if(numberOfProperties == MAX_PROPERTY - 1) {
+			return -1;
+		} else {
+			properties[numberOfProperties] =  new Property(name, city, rent, owner, x, y, width, depth);
+			if(!properties[numberOfProperties].getPlot().overlaps(mgtPlot)) {
+				return -3;
+			} else if(mgtPlot.encompasses(properties[numberOfProperties].getPlot())) {
+				return -4;
+			}
+			return numberOfProperties++;
+		}
+	}
+
+	public int addProperty(Property property) {
+		if(property == null) {
+			return -2;
+		} else {
+			if(numberOfProperties == MAX_PROPERTY - 1) {
+				return -1;
+			} else {
+				properties[numberOfProperties] =  new Property(property);
+				if(!properties[numberOfProperties].getPlot().overlaps(mgtPlot)) {
+					return -3;
+				} else if(mgtPlot.encompasses(properties[numberOfProperties].getPlot())) {
+					return -4;
+				}
+				return numberOfProperties++;
+			}
+
+		}
+	}
+
+	public Property getHighestRentProperty() {
+		int highestRentIndex = 0;
+		for(int i = 1; i  < numberOfProperties; i++ ) {
+			if(properties[i].getRentAmount() > properties[highestRentIndex].getRentAmount()) {
+				highestRentIndex = i;
+			}
+		}
+		return properties[highestRentIndex];
+	}
+
+	public double getMgmFeePer() {
+		return mgmFee;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Plot getPlot() {
+		return plot;
+	}
+
+	public Property[] getProperties() {
+		return properties;
+	}
+
+	public int getPropertiesCount() {
+		return numberOfProperties + 1;
+	}
+
+	public String getTaxID() {
+		return taxID;
+	}
+
+	public int getTotalRent() {
+		int sum = 0;
+		for(int i = 1; i < numberOfProperties; i++ ) {
+			sum+= properties[i].getRentAmount();
+		}
+		return sum;
+	}
+
+	public boolean isMangementFeeValid() {
+		if( 0 < mgmFee && mgmFee < 100 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isPropertiesFull() {
+		if(numberOfProperties == MAX_PROPERTY - 1 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void removeLastProperty() {
+		properties[numberOfProperties - 1] = null;
+		//System.gc();
+	}
+
+	public String toString() {
+		String propertiesString = "";
+		for(int i = 0; i < numberOfProperties; i++) {
+			propertiesString += properties[i] + "\n";
+		}
+		return "List of the properties for " + name + ", taxID: " + taxID +
+				"\n ______________________________________________________" + propertiesString +
+				"\n ______________________________________________________"  + this.getHighestRentProperty();
+	}
+}
